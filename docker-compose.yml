@@ -17,6 +17,15 @@ services:
       - netbox-media-files:/opt/netbox/netbox/media:rw
       - netbox-reports-files:/opt/netbox/netbox/reports:rw
       - netbox-scripts-files:/opt/netbox/netbox/scripts:rw
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.netbox.rule=Host(`docs.codexsengineer.com.br`)"
+      - "traefik.http.routers.netbox.entrypoints=websecure"
+      - "traefik.http.routers.netbox.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.netbox.loadbalancer.server.port=8080"
+      - "traefik.docker.network=codex-network"
+    networks:
+      - codex-network
   netbox-worker:
     <<: *netbox
     depends_on:
@@ -85,3 +94,7 @@ volumes:
     driver: local
   netbox-scripts-files:
     driver: local
+
+networks:
+  codex-network:
+    external: true
