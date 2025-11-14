@@ -25,6 +25,7 @@ services:
       - "traefik.http.services.netbox.loadbalancer.server.port=8080"
       - "traefik.docker.network=codex-network"
     networks:
+      - default
       - codex-network
   netbox-worker:
     <<: *netbox
@@ -53,6 +54,8 @@ services:
     env_file: env/postgres.env
     volumes:
       - netbox-postgres-data:/var/lib/postgresql/data
+    networks:
+      - default
 
   # redis
   redis:
@@ -70,6 +73,8 @@ services:
     env_file: env/redis.env
     volumes:
       - netbox-redis-data:/data
+    networks:
+      - default
   redis-cache:
     image: docker.io/valkey/valkey:8.1-alpine
     command:
@@ -80,6 +85,8 @@ services:
     env_file: env/redis-cache.env
     volumes:
       - netbox-redis-cache-data:/data
+    networks:
+      - default
 
 volumes:
   netbox-media-files:
